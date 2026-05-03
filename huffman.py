@@ -88,6 +88,8 @@ def huffman_encode_help(code_dict, text):
 
 
 def huffman_encode(text):
+    if len(text) < 1:
+        return ["", None]
     sorted_freq_dic = build_sorted_freq_dic(text)
     node_list = get_node_list(sorted_freq_dic)
     root_node = get_root_node(node_list)
@@ -100,17 +102,21 @@ def huffman_decode(encoded_string, root):
     if encoded_string == "":
         return ""
     
-    length = 0
-    curr_node = root
+    elif root.right is None and root.left is None:
+        return root.char * root.freq
 
-    for i in encoded_string:
-        length += 1
-        
-        if i == "0":
-            curr_node = curr_node.left
-        elif i == "1":
-            curr_node = curr_node.right
+    else:
+        length = 0
+        curr_node = root
 
-        if curr_node.right is None and curr_node.left is None:
-            return curr_node.char + huffman_decode(encoded_string[length::], root)
+        for i in encoded_string:
+            length += 1
+            
+            if i == "0":
+                curr_node = curr_node.left
+            elif i == "1":
+                curr_node = curr_node.right
+
+            if curr_node.right is None and curr_node.left is None:
+                return curr_node.char + huffman_decode(encoded_string[length::], root)
         
