@@ -9,6 +9,7 @@ A Python program that enables the user to both encode a text into binary code an
 - Creates codes for each letter based on their position within the tree
 - Encodes the text using the generated codes for the letters
 - Decodes the binary code back into text given the generated Huffman tree
+- Handles strings made entirely of one specific character and empty input
 
 ## How It Works
 
