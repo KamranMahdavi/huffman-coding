@@ -12,6 +12,9 @@ def build_sorted_freq_dic(text):
 def sort_node_list(node_list):
     return sorted(node_list, key=lambda x: x.freq, reverse=True)
 
+def reverse_dic(dictionary):
+    return {value: key for key, value in dictionary.items()}
+
 def pair_list_to_dic(input_list):
     dic = {}
     for x in input_list:
@@ -89,14 +92,26 @@ def huffman_encode_help(code_dict, text):
 
 def huffman_encode(text):
     if len(text) < 1:
-        return ["", None]
+        return "", None
     sorted_freq_dic = build_sorted_freq_dic(text)
     node_list = get_node_list(sorted_freq_dic)
     root_node = get_root_node(node_list)
     list_of_codes = generate_codes(root_node)
     dict_of_codes = pair_list_to_dic(list_of_codes)
     encoded_text = huffman_encode_help(dict_of_codes, text)
-    return [encoded_text, root_node]
+    return encoded_text, root_node
+
+def huffman_encode_v2(text):
+    if len(text) < 1:
+        return "", None
+    sorted_freq_dic = build_sorted_freq_dic(text)
+    node_list = get_node_list(sorted_freq_dic)
+    root_node = get_root_node(node_list)
+    list_of_codes = generate_codes(root_node)
+    dict_of_codes = pair_list_to_dic(list_of_codes)
+    encoded_text = huffman_encode_help(dict_of_codes, text)
+    reversed_dict_of_codes = reverse_dic(dict_of_codes)
+    return encoded_text, reversed_dict_of_codes
 
 def huffman_decode(encoded_string, root):
     if encoded_string == "":
@@ -120,3 +135,22 @@ def huffman_decode(encoded_string, root):
             if curr_node.right is None and curr_node.left is None:
                 return curr_node.char + huffman_decode(encoded_string[length::], root)
         
+def huffman_decode_v2(encoded_string, encoded_dict):
+    if encoded_string == "":
+        return ""
+    
+    else:
+        decoded_string = ""
+        bits = ""
+        
+        for bit in encoded_string:
+            bits += bit
+
+            if bits in encoded_dict.keys():
+                decoded_string += encoded_dict[bits]
+                bits = ""
+
+        if len(bits) != 0:
+            raise ValueError("Key mismatches the given text.")
+
+    return decoded_string
